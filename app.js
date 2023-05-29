@@ -34,7 +34,7 @@ app.use('/api', managerRoutes);
 
 app.get('/', (req, res) => {
     
-     res.send('Hello, Boy!');
+     res.status(200).json({message:'Hello, Boy!'});
     
   });
 
