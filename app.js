@@ -33,8 +33,9 @@ app.use('/api', disciplineRoutes);
 app.use('/api', managerRoutes);
 
 app.get('/', (req, res) => {
-    // Render the 'index.ejs' template
-    res.render('login.ejs');
+    
+     res.send('Hello, Boy!');
+    
   });
 
 
