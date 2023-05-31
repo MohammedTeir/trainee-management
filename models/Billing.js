@@ -14,7 +14,7 @@ const billingSchema = new mongoose.Schema({
     type: String,
   },
 program: { 
-    type: Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,  
     ref: 'TrainingProgram' 
 },
   status: {
