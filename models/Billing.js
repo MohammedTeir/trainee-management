@@ -13,6 +13,10 @@ const billingSchema = new mongoose.Schema({
   description:{
     type: String,
   },
+program: { 
+    type: Schema.Types.ObjectId, 
+    ref: 'TrainingProgram' 
+},
   status: {
     type: String,
     enum: ['unpaid', 'paid'],
