@@ -52,19 +52,11 @@ const registerAdvisorSchema = Joi.object({
   });
 
   const sendNotificationSchema = Joi.object({
-    trainees: Joi.array()
-      .min(1)
-      .required()
-      .messages({
-        'any.required': 'traineeIds are required',
-        'array.empty': 'traineeIds must not be empty',
-      }),
     message: Joi.string().required().messages({
 
       'any.required': 'message is required',
       'string.empty': 'message must not be empty',
       
-    
     }),
   });
   
@@ -127,12 +119,6 @@ const registerAdvisorSchema = Joi.object({
     content: Joi.string().required().messages({
       'string.base': 'Content must be a string',
       'any.required': 'Content is required',
-    }),
-    trainees: Joi.array().items(Joi.string().required()).required().messages({
-      'array.base': 'Trainee IDs must be an array',
-      'array.empty': 'Trainee IDs array cannot be empty',
-      'any.required': 'Trainee IDs are required',
-      'string.base': 'Trainee ID must be a string',
     }),
   });
 
