@@ -830,8 +830,7 @@ const getAdvisorDocuments = async (req, res, next) => {
   
       // Find all enrolled programs for the trainee
       const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId })
-        .populate('program')
-        .exec();
+        .populate('program');
   
      return  res.status(200).json({data:enrolledPrograms});
     } catch (error) {
