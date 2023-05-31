@@ -887,7 +887,7 @@ const getAdvisorDocuments = async (req, res, next) => {
       const  programId  = value.id;
   
       // Find the enrolled program for the trainee and program
-      const enrolledProgram = await EnrolledProgram.findOne({ trainee: traineeId, program: programId , status:'enrolled'}).exec();
+      const enrolledProgram = await EnrolledProgram.findOne({ trainee: traineeId, program: programId , status:'Enrolled'}).exec();
   
       if (!enrolledProgram) {
         const error =  createError(404, 'Enrollment not found');
