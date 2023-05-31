@@ -28,7 +28,7 @@ router.patch('/billing/:id/pay',auth('trainee'),multer.none(),findPaymentCard,tr
 router.post('/upload', auth('trainee'), multer.array('files'), traineeController.uploadDocuments);
 router.get('/my-advisor/documents', auth('trainee'),multer.none(),  traineeController.getAdvisorDocuments);
 router.post('/appointments', multer.none(), auth('trainee'),  traineeController.requestAppointment);
-router.delete('/appointments/:id', auth('trainee'), multer.none(), traineeController.cancelAppointment);
+router.put('/appointments/:id', auth('trainee'), multer.none(), traineeController.cancelAppointment);
 router.patch('/change-password', auth('trainee'),multer.none(),  traineeController.changeTraineePassword);
 router.post('/payment-card', auth('trainee'),multer.none(),  traineeController.addPaymentCard);
 router.get('/',  auth('trainee') , multer.none(), traineeController.myProfile);
