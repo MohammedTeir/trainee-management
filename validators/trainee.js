@@ -65,10 +65,7 @@ const registerTraineeSchema = Joi.object({
 
 
   const requestTraineeAppointmentSchema = Joi.object({
-    advisor: Joi.string().required().messages({
-      'any.required': 'Advisor ID is required.',
-      'string.empty': 'Advisor ID must not be empty.',
-    }),
+
     appointmentDate: Joi.date().required().messages({
       'any.required': 'Appointment date is required.',
       'date.base': 'Invalid appointment date.',
