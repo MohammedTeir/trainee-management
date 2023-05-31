@@ -32,8 +32,6 @@ const enrolledProgramSchema = new mongoose.Schema(
   }
 );
 
-enrolledProgramSchema.index({ traineeId: 1, programId: 1 }, { unique: true });
-
 const EnrolledProgram = mongoose.model('EnrolledProgram', enrolledProgramSchema);
 
 module.exports = EnrolledProgram;
