@@ -13,7 +13,7 @@ router.delete('/', auth('advisor'), advisorController.deleteAdvisor);//
 router.put('/', multer.none() , auth('advisor') ,advisorController.updateAdvisor);//
 router.post('/logout', multer.none() , auth('advisor'),  advisorController.logout);//
 router.post('/notifications', multer.none() ,auth('advisor'),  advisorController.sendNotification);//
-router.get('/attendance-records', multer.none() ,auth('advisor'),  advisorController.viewAttendanceRecords);//
+router.post('/attendance-records', multer.none() ,auth('advisor'),  advisorController.viewAttendanceRecords);//
 router.get('/appointment-requests', multer.none() ,auth('advisor'),  advisorController.viewAppointmentRequests);//
 router.patch('/appointment-requests/accept/:id', multer.none() ,auth('advisor'),  advisorController.acceptAppointmentRequest);//
 router.patch('/appointment-requests/reject/:id', multer.none() ,auth('advisor'),  advisorController.rejectAppointmentRequest);//
