@@ -473,20 +473,22 @@ const getAdvisorDocuments = async (req, res, next) => {
   
   const requestAppointment = async (req, res, next) => {
     try {
-      const { error: validationError, value } = traineeValidator.requestTraineeAppointmentSchema.validate(req.body);
+      const { error: validationError, value } = traineeValidator.requestTraineeAppointmentSchema.validate(
+        req.body
+      );
       if (validationError) {
         const error = createError(400, validationError.details[0].message);
         return next(error);
       }
   
-      const { advisor, appointmentDate, duration, location, notes } = value;
+      const { appointmentDate, duration, location, notes } = value;
       const traineeId = req.user.id; // assuming the trainee ID is stored in the req object
   
       const currentDate = new Date().setHours(0, 0, 0, 0);
   
       // Check if the trainee has already requested an appointment for the current date
       const existingAppointment = await TraineeAppointment.findOne({
-        trainee:traineeId,
+        trainee: traineeId,
         createdDate: { $gte: currentDate, $lt: new Date() },
       });
   
@@ -495,22 +497,27 @@ const getAdvisorDocuments = async (req, res, next) => {
         return next(error);
       }
   
-      const isAdvisor = await Advisor.findById(advisor);
-      if (!isAdvisor) {
-        const error = createError(404, 'Advisor not found');
+      const trainee = await Trainee.findById(traineeId);
+      if (!trainee) {
+        const error = createError(404, 'Trainee not found');
         return next(error);
       }
   
+      const advisor = trainee.advisor; // Assuming the trainee has an advisor field referencing the advisor
+  
       const traineeAppointment = new TraineeAppointment({
-        trainee:traineeId,
-        advisor:advisor,
-        appointmentDate:appointmentDate,
-        duration:duration,
-        location:location,
-        notes:notes,
+        trainee: traineeId,
+        advisor: advisor,
+        appointmentDate: appointmentDate,
+        duration: duration,
+        location: location,
+        notes: notes,
       });
   
-      await (await traineeAppointment.save()).populate('advisor', ' name email');
+      await traineeAppointment.save();
+  
+      await traineeAppointment.populate('advisor', 'name email');
+  
       return res.status(201).json({
         status: 'success',
         message: 'Trainee appointment requested successfully',
