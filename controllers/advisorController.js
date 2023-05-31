@@ -314,28 +314,43 @@ const viewTraineeProgress = async (req, res, next) => {
 
 // Send notifications
 const sendNotification = async (req, res, next) => {
-    try {
-
-      const { error: validationError , value} = advisorValidator.sendNotificationSchema.validate(req.body);
-      if (validationError) {
-        const error =  createError(400, validationError.details[0].message);
-        return next(error);
-      }
-
-
-    const { trainees, message } = value;
-    const notification = new TraineeNotification({
-    sender: req.user.id,
-    recipients: trainees,
-    message,
-    });
-    await notification.save();
-    await notification.populate('sender recipients' , 'name email')
-    return res.status(200).json({ message: 'Notification sent successfully' , data:notification });
-    } catch (error) {
-    return next(error);
+  try {
+    const { error: validationError, value } = advisorValidator.sendNotificationSchema.validate(
+      req.body
+    );
+    if (validationError) {
+      const error = createError(400, validationError.details[0].message);
+      return next(error);
     }
-    };
+
+    const { message } = value;
+    const advisorId = req.user.id;
+
+    // Retrieve the advisor from the database
+    const advisor = await Advisor.findById(advisorId).populate('trainees');
+
+    if (!advisor) {
+      const error = createError(404, 'Advisor not found');
+      return next(error);
+    }
+
+    const trainees = advisor.trainees.map(trainee => trainee._id);
+
+    const notification = new TraineeNotification({
+      sender: advisorId,
+      recipients: trainees,
+      message,
+    });
+
+    await notification.save();
+    await notification.populate('sender recipients', 'name email');
+
+    return res.status(200).json({ message: 'Notification sent successfully', data: notification });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 // View attendance records
 const viewAttendanceRecords = async (req, res, next) => {
   try {
@@ -580,37 +595,40 @@ const myDocuments = async (req, res, next) => {
       }
     };
 
-    const createGeneralAdvice = async (req, res, next) => {
+     const createGeneralAdvice = async (req, res, next) => {
       try {
-
-        const { error: validationError ,value } = advisorValidator.createGeneralAdviceSchema.validate(req.body);
+        const { error: validationError, value } = advisorValidator.createGeneralAdviceSchema.validate(
+          req.body
+        );
         if (validationError) {
-          const error =  createError(400, validationError.details[0].message);
+          const error = createError(400, validationError.details[0].message);
           return next(error);
         }
-
-        const { subject, content, trainees } = value;
+    
+        const { subject, content } = value;
+        const advisorId = req.user.id;
     
         // Check if the advisor exists
-        const isAdvisor = await Advisor.findById(req.user.id);
-        if (!isAdvisor) {
+        const advisor = await Advisor.findById(advisorId);
+        if (!advisor) {
           const error = createError(404, 'Advisor not found');
           return next(error);
         }
     
+        const trainees = advisor.trainees.map(trainee => trainee._id);
+    
         // Create a new general advice instance
         const generalAdvice = new GeneralAdvice({
-          advisor: isAdvisor._id,
+          advisor: advisor._id,
           subject,
           content,
-          trainees: trainees,
+          trainees,
         });
     
         // Save the general advice to the database
         const savedGeneralAdvice = await generalAdvice.save();
-        await savedGeneralAdvice.populate('trainees','name');
-        
-
+        await savedGeneralAdvice.populate('trainees', 'name');
+    
         return res.status(201).json({
           message: 'General advice created successfully',
           data: savedGeneralAdvice,
