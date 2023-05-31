@@ -795,6 +795,7 @@ const getAdvisorDocuments = async (req, res, next) => {
       amount: program.cost,
       description: `Billing for program: ${program.name}`,
       status: 'unpaid',
+      program:programId,
     });
 
     await billing.save();
