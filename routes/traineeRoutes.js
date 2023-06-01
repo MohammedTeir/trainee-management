@@ -15,7 +15,7 @@ router.get('/notifications', auth('trainee'),multer.none(),  traineeController.g
 router.get('/general-advice', multer.none(), auth('trainee'),  traineeController.getTraineeGeneralAdvice);
 router.get('/attendance', multer.none(),auth('trainee'), traineeController.getTraineeAttendance);
 router.get('/attendance/:id', multer.none(),auth('advisor'), traineeController.getTraineeAttendanceByTraineeId);
-router.post('/join-program/:id', auth('trainee'), multer.none(), findPaymentCard, traineeController.joinToTrainingProgram);
+router.post('/join-program/:id', auth('trainee'), multer.none(), traineeController.joinToTrainingProgram);
 router.get('/enrolled-programs', auth('trainee'),multer.none(),traineeController.getTraineeEnrolledPrograms);
 router.delete('/remove-program/:id',auth('trainee'), multer.none(), traineeController.removeTraineeFromProgram);
 router.get('/enrollment-details/:id', auth('trainee'), multer.none(),traineeController.getEnrolledProgramDetails);
@@ -24,7 +24,7 @@ router.get('/programs/status/:status', auth('trainee'), traineeController.getTra
 router.get('/billings',auth('trainee'), multer.none(), traineeController.getTraineeBillings);
 router.get('/billings/unpaid', auth('trainee'), multer.none(),traineeController.getUnpaidBillings);
 router.get('/billings/paid/', auth('trainee'), multer.none(), traineeController.getPaidBillings);
-router.patch('/billing/:id/pay',auth('trainee'),multer.none(),findPaymentCard,traineeController.payBilling);
+router.patch('/billing/:id/pay',auth('trainee'),multer.none(),traineeController.payBilling);
 router.post('/upload', auth('trainee'), multer.array('files'), traineeController.uploadDocuments);
 router.get('/my-advisor/documents', auth('trainee'),multer.none(),  traineeController.getAdvisorDocuments);
 router.post('/appointments', multer.none(), auth('trainee'),  traineeController.requestAppointment);
