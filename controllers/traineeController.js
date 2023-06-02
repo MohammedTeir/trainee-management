@@ -824,19 +824,22 @@ const getAdvisorDocuments = async (req, res, next) => {
   }
   };
   
-  const getTraineeEnrolledPrograms = async (req, res, next) => {
-    try {
-      const traineeId = req.user.id;
-  
-      // Find all enrolled programs for the trainee
-      const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId })
-        .populate('program');
-  
-     return  res.status(200).json({data:enrolledPrograms});
-    } catch (error) {
-      next(error);
-    }
-  };
+const getTraineeEnrolledPrograms = async (req, res, next) => {
+  try {
+    const traineeId = req.user.id;
+
+    // Find all enrolled or completed programs for the trainee
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId })
+      .populate('program')
+      .where('status')
+      .in(['Enrolled', 'Completed']);
+
+    return res.status(200).json({ data: enrolledPrograms });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 
   const removeTraineeFromProgram = async (req, res, next) => {
