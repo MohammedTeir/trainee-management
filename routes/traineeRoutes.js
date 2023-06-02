@@ -37,6 +37,7 @@ router.post('/login', multer.none(), traineeController.login);
 router.post('/register', multer.array('files'), traineeController.registerTrainee);
 router.delete('/', auth('trainee'),multer.none(),traineeController.deleteTraineeAccount);
 router.get('/:id', auth('advisor'), multer.none(), traineeController.getTraineeById);
+router.get('/all-programs', auth('trainee'), multer.none(), traineeController.getAllTrainingPrograms);
 
 
 
