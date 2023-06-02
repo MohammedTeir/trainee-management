@@ -1020,17 +1020,24 @@ const getAdvisorDocuments = async (req, res, next) => {
         return next(error);
       }
     };
-    const getAllTrainingPrograms = async (req, res, next) => {
+const getAllTrainingPrograms = async (req, res, next) => {
   try {
-    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id });
-    const enrolledProgramIds = enrolledPrograms.map(program => program.program);
-
+    const traineeId = req.user.id;
+    
+    // Retrieve all enrolled program IDs for the trainee
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId });
+    const enrolledProgramIds = enrolledPrograms.map(enrollment => enrollment.program);
+    
+    // Retrieve all training programs that the trainee has not enrolled in
     const trainingPrograms = await TrainingProgram.find({ _id: { $nin: enrolledProgramIds } });
+    
     return res.status(200).json({ data: trainingPrograms });
   } catch (error) {
     return next(error);
   }
 };
+
+
 
 
   module.exports={
@@ -1067,5 +1074,5 @@ const getAdvisorDocuments = async (req, res, next) => {
   createTraineeAttendance,
   getTraineeAttendanceByTraineeId,
   myAppointments,
-getAllTrainingPrograms
+  getAllTrainingPrograms
 }
