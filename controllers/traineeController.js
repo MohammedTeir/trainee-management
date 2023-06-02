@@ -1025,25 +1025,20 @@ const getTraineeEnrolledPrograms = async (req, res, next) => {
     };
 
 
-const getAllTrainingPrograms = async (req, res, next) => {
+const getAllTrainingProgramsNotIn = async (req, res, next) => {
   try {
-    // Find all training programs
-    const allPrograms = await TrainingProgram.find();
+    // Find the enrolled or completed programs for the trainee
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id, status: { $in: ['Enrolled', 'Completed'] } }).distinct('program');
 
-    // Find the programs in which the trainee is enrolled
-    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id ,  $or: [
-    { status: 'Enrolled' },
-    { status: 'Completed' }
-  ] }).distinct('program');
-
-    // Filter out the programs in which the trainee is enrolled
-    const programsNotEnrolled = allPrograms.filter(program => !enrolledPrograms.includes(program._id));
+    // Find all training programs that the trainee is not enrolled in and are not completed
+    const programsNotEnrolled = await TrainingProgram.find({ _id: { $nin: enrolledPrograms }, status: { $ne: 'Completed' } });
 
     return res.status(200).json({ data: programsNotEnrolled });
   } catch (error) {
     return next(error);
   }
 };
+
 
 
 
