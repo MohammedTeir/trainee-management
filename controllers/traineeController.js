@@ -1025,7 +1025,7 @@ const getTraineeEnrolledPrograms = async (req, res, next) => {
     };
 
 
-const getAllTrainingProgramsNotIn = async (req, res, next) => {
+const getAllTrainingPrograms = async (req, res, next) => {
   try {
     // Find the programs in which the trainee is enrolled
     const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id ,status:'Cancelled'}).distinct('program');
