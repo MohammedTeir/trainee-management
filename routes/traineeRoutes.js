@@ -6,6 +6,7 @@ const findPaymentCard = require('../middlewares/findPaymentCard');
 
 const multer = require('../config/multer');
 
+router.get('/all-programs', auth('trainee'), multer.none(), traineeController.getAllTrainingPrograms);
 router.get('/appointments', auth('trainee'), multer.none(), traineeController.myAppointments);
 router.post('/attendance',auth('trainee'),multer.none(), traineeController.createTraineeAttendance);
 router.post('/logout',  auth('trainee'), multer.none(),  traineeController.logout);
@@ -31,13 +32,12 @@ router.post('/appointments', multer.none(), auth('trainee'),  traineeController.
 router.put('/appointments/:id', auth('trainee'), multer.none(), traineeController.cancelAppointment);
 router.patch('/change-password', auth('trainee'),multer.none(),  traineeController.changeTraineePassword);
 router.post('/payment-card', auth('trainee'),multer.none(),  traineeController.addPaymentCard);
-router.get('/',  auth('trainee') , multer.none(), traineeController.myProfile);
 //  router.get('/identity-documents', auth('trainee'),  traineeController.getIdentityDocuments);
 router.post('/login', multer.none(), traineeController.login);
 router.post('/register', multer.array('files'), traineeController.registerTrainee);
 router.delete('/', auth('trainee'),multer.none(),traineeController.deleteTraineeAccount);
 router.get('/:id', auth('advisor'), multer.none(), traineeController.getTraineeById);
-router.get('/all-programs', auth('trainee'), multer.none(), traineeController.getAllTrainingPrograms);
+router.get('/',  auth('trainee') , multer.none(), traineeController.myProfile);
 
 
 
