@@ -1029,13 +1029,20 @@ const getAllTrainingPrograms = async (req, res, next) => {
     const enrolledProgramIds = enrolledPrograms.map(enrollment => enrollment.program);
 
     // Find all training programs that the trainee has not enrolled in
-    const trainingPrograms = await TrainingProgram.find({ _id: { $nin: enrolledProgramIds } });
+    const trainingPrograms = await TrainingProgram.aggregate([
+      {
+        $match: {
+          _id: { $nin: enrolledProgramIds }
+        }
+      }
+    ]);
 
     return res.status(200).json({ data: trainingPrograms });
   } catch (error) {
     return next(error);
   }
 };
+
 
 
 
