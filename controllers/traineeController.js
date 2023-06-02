@@ -1032,8 +1032,8 @@ const getAllTrainingPrograms = async (req, res, next) => {
 
     // Find the programs in which the trainee is enrolled
     const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id ,  $or: [
-    { status: 'enrolled' },
-    { status: 'completed' }
+    { status: 'Enrolled' },
+    { status: 'Completed' }
   ] }).distinct('program');
 
     // Filter out the programs in which the trainee is enrolled
