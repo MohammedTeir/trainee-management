@@ -1020,28 +1020,25 @@ const getAdvisorDocuments = async (req, res, next) => {
         return next(error);
       }
     };
-const getAllTrainingPrograms = async (req, res, next) => {
+
+
+const getAllProgramsNotEnrolled = async (traineeId) => {
   try {
-    const traineeId = req.user.id; // Assuming the trainee ID is stored in the req object
+    // Find all programs
+    const allPrograms = await TrainingProgram.find();
 
-    // Get the IDs of the programs the trainee has already enrolled in
-    const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId }).select('program');
-    const enrolledProgramIds = enrolledPrograms.map(enrollment => enrollment.program);
+    // Find the programs in which the trainee is enrolled
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId }).distinct('program');
 
-    // Find all training programs that the trainee has not enrolled in
-    const trainingPrograms = await TrainingProgram.aggregate([
-      {
-        $match: {
-          _id: { $nin: enrolledProgramIds }
-        }
-      }
-    ]);
+    // Filter out the programs that the trainee is already enrolled in
+    const programsNotEnrolled = allPrograms.filter(program => !enrolledPrograms.includes(program._id));
 
-    return res.status(200).json({ data: trainingPrograms });
+    return res.status(200).json({data:programsNotEnrolled});
   } catch (error) {
     return next(error);
   }
 };
+
 
 
 
