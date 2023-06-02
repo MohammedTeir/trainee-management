@@ -1022,13 +1022,13 @@ const getAdvisorDocuments = async (req, res, next) => {
     };
 
 
-const getAllProgramsNotEnrolled = async (traineeId) => {
+const getAllTrainingPrograms = async (req,res,next) => {
   try {
     // Find all programs
     const allPrograms = await TrainingProgram.find();
 
     // Find the programs in which the trainee is enrolled
-    const enrolledPrograms = await EnrolledProgram.find({ trainee: traineeId }).distinct('program');
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id }).distinct('program');
 
     // Filter out the programs that the trainee is already enrolled in
     const programsNotEnrolled = allPrograms.filter(program => !enrolledPrograms.includes(program._id));
