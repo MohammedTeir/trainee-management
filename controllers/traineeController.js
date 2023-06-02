@@ -1025,24 +1025,20 @@ const getTraineeEnrolledPrograms = async (req, res, next) => {
     };
 
 
-const getAllTrainingPrograms = async (req, res, next) => {
+const getAllTrainingProgramsNotIn = async (req, res, next) => {
   try {
     // Find the programs in which the trainee is enrolled
-    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id }).distinct('program');
+    const enrolledPrograms = await EnrolledProgram.find({ trainee: req.user.id ,status:'Cancelled'}).distinct('program');
 
     // Find all programs that the trainee is not enrolled in
-    const programsNotEnrolled = await TrainingProgram.find({
-      $or: [
-        { _id: { $nin: enrolledPrograms } },
-        { status: 'Cancelled' }
-      ]
-    });
+    const programsNotEnrolled = await TrainingProgram.find({ _id: { $nin: enrolledPrograms } });
 
     return res.status(200).json({ data: programsNotEnrolled });
   } catch (error) {
     return next(error);
   }
 };
+
 
 
 
