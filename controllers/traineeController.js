@@ -184,7 +184,7 @@ const login = async (req, res, next) => {
     const id  = req.user.id;
 
     try {
-      const trainee = await Trainee.findById(id).select(['-password']).populate('uploadedDocuments' , 'name url');
+      const trainee = await Trainee.findById(id).select(['-password']).populate('uploadedDocuments advisor');
       if (!trainee) {
         const error = createError(404, 'Trainee not found');
         return next(error);
