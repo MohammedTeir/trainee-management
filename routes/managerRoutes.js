@@ -32,7 +32,7 @@ router.get('/active-trainees', multer.none() ,auth('manager'),  traineeControlle
 
 router.get('/active-advisors', multer.none() ,auth('manager'),  advisorController.getActiveAdvisors);//
 
-router.get('/inactive-advisors', multer.none() ,auth('manager'),  advisorController.getInactiveAdvisors);//
+router.get('/inactive-advisors', multer.none() ,  advisorController.getInactiveAdvisors);//
 
 router.get('/program/attendance/:id', multer.none(), auth('manager'), trainingProgramController.getTraineeAttendanceByProgramId);
 
